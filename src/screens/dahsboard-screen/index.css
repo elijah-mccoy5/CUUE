@@ -1,0 +1,66 @@
+.dashboard-logo {
+  justify-content: center;
+  position: relative;
+  margin-right: 25vw;
+}
+
+@media only screen and (max-width: 600px) {
+  .dash-words {
+    margin-left: 0;
+  }
+  .done-2 {
+    font-size: 10px;
+    width: 60%;
+    visibility: visible;
+  }
+  .dash-align {
+    flex-direction: column;
+  }
+  .dashboard-logo {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: auto;
+  }
+  .dash-words {
+    padding-right: 450vw;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .dash-words {
+    padding-right: 450vw;
+  }
+  .done-2 {
+    visibility: visible;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .dash-words {
+    margin-bottom: auto;
+    padding-right: 35vw;
+  }
+  .done-2 {
+    visibility: collapse;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .dash-words {
+    padding-left: 450vw;
+  }
+  .done-2 {
+    visibility: collapse;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .dash-words {
+    margin-top: 0;
+    padding-left: 35vw;
+    padding-right: 0;
+  }
+  .done-2 {
+    visibility: visible;
+  }
+}
