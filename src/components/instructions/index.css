@@ -1,4 +1,46 @@
 .instruction-image {
-  width: 30vw;
+  align-self: center;
   height: 100vh;
+}
+@media only screen and (max-width: 600px) {
+  .instruction-image {
+    visibility: collapse;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .instruction-image {
+    width: 20vw;
+    height: 64vh;
+  }
+  .instruction-image {
+    visibility: collapse;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .instruction-image {
+    width: 28vw;
+    height: 75vh;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .instruction-image {
+    width: 30vw;
+    height: 80vh;
+  }
+  .instruction-image {
+    visibility: visible;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .instruction-image {
+    width: 28vw;
+    height: 85vh;
+  }
+  .instruction-image {
+    visibility: visible;
+  }
 }

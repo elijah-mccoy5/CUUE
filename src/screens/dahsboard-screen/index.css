@@ -24,6 +24,9 @@
   .dash-words {
     padding-right: 450vw;
   }
+  .btn-doe {
+    visibility: visible;
+  }
 }
 
 @media only screen and (min-width: 600px) {
@@ -31,6 +34,9 @@
     padding-right: 450vw;
   }
   .done-2 {
+    visibility: visible;
+  }
+  .btn-doe {
     visibility: visible;
   }
 }

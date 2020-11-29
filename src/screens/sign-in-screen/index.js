@@ -64,10 +64,6 @@ const getUserData = async (key)=> {
   return
 }
 
-
-
-
-
 const getTokens = async () => {
   try {
     const authorizationCode = await getAuthorizationCode() //we wrote this function above
