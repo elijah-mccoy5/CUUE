@@ -16,7 +16,7 @@ const Instructions = () => {
               <p className="p-2  mt-5" style={{fontSize: "3vh"}}><ArrowRightIcon/>Go to the Spotify app, play a song. then come back and press Start CUUE.(Spotify must be playing before starting a party.)</p>
               <p className="p-2  mt-5" style={{fontSize: "3vh"}}><ArrowRightIcon/>After your party is started, search a song, and select your tune</p>
               </div>
-              <Link to="/signin">
+              <Link to="/partycreation">
                         <Button variant="light" size="lg" style={{ marginTop: "5vh"}}><img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify</Button> 
                         </Link>               
             </section>

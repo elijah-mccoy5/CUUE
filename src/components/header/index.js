@@ -5,13 +5,13 @@ import './index.css'
 const Header = () => {
     return (
             <Navbar sticky="top" bg="light" expand="lg">
-                <Navbar.Brand href="/" style={{fontFamily: "Fugaz One', cursive" }}>
+                <Navbar.Brand href="/dashboard" style={{fontFamily: "Fugaz One', cursive" }}>
                     CUEE
                     </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                    <Nav.Link href="/connect">Create Party +</Nav.Link>
+                    <Nav.Link href="/partycreation">Create Party +</Nav.Link>
                     </Nav>
                     <Nav style={{marginRight: "30px", alignItems: "center"}}>
                         <NavDropdown title="Profile" id="basic-nav-dropdown" >
