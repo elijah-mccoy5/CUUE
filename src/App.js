@@ -5,7 +5,6 @@ import {BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Dashboard from './screens/dahsboard-screen';
 import Header from './components/header';
 import NoMatch from './screens/no-match-screen'
-import { Home, Search } from '@material-ui/icons';
 import PartyCreation from './screens/party-creation-screen';
 import SearchPlaylist from './screens/search-playlist-screen';
 
@@ -23,7 +22,6 @@ function App() {
         <Route path="/" component={PartyCreation}/>
         <Route path="/about"/>
         <Route path="/profile"/>
-         <Route exact path="/home" component={Home}/>
          <Route component={NoMatch}/>
          <Route path="/searchplaylist" component={SearchPlaylist}/>
         </Switch>

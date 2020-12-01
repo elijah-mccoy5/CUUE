@@ -73,25 +73,23 @@ import SearchPlaylist from '../search-playlist-screen';
       
 
           return (
-            <div >
+            <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
               {this.state.user ?
-              <div>
-                  <Jumbotron style={{display: "flex", flexDirection: "column", backgroundColor: "#fc4474"}} className="justify-content-around align-items-center c-flex">
-                    <img style={{height: "50vh", width: "28vw"}} alt="start cuee" src={logo}/>
-                    
-                  </Jumbotron>
-                  <Card>
+              <div style={{ justifyContent: "center", alignItems: "center", top: 0}}>
+                  <Card className="playlist-card" style={{  backgroundColor: "#353B3C", width: "100vw", height: "100%",display: "flex", flexDirection: "row", top: 0}}>
                       <Card.Body>
-                      <h1>Search A playlist to start</h1>
+                          <Card style={{}}>
+                              <Card.Body>
+                                  <h1 style={{marginTop: "1vh", color: "white", backgroundColor: "#353B3C", padding: "10px", width: "12vw", borderRadius: "20px", marginBottom: "6vh", alignSelf: "center",  marginLeft: "auto", marginRight: "auto"}}>Join a party</h1>
+                                  <ul style={{listStyle: "none"}}>
+                                      <li>Jessica's Party</li>
+                                      <li>DOPe party time lol</li>
+                                      <li>Crazy beats</li>
+                                      <li>Lo-fi Type Beats</li>
+                                  </ul>
+                              </Card.Body>
+                          </Card>
                       <SearchPlaylist/>
-                      <h1>Join CUUE</h1>
-                      <ul>
-                     <li>IMAGINE THIS IS AN IN SESSION PARTY</li>
-                     <li>IMAGINE THIS IS AN IN SESSION PARTY</li>
-                     <li>IMAGINE THIS IS AN IN SESSION PARTY</li>
-                     <li>IMAGINE THIS IS AN IN SESSION PARTY</li>
-                     <li>IMAGINE THIS IS AN IN SESSION PARTY</li>
-                     </ul>
                   </Card.Body>
                   </Card>
               </div> :

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
+import { Card, Button } from 'react-bootstrap'
+import spotify from '../../assets/spotify.png';
+
+
 
 let defaultStyle = {
   color: '#fff',
-  'font-family': 'Papyrus'
+  fontFamily: 'Montserrat, sans-serif'
 };
 let counterStyle = {...defaultStyle, 
   width: "40%", 
@@ -53,14 +57,20 @@ class HoursCounter extends Component {
 class Filter extends Component {
   render() {
     return (
-      <div style={defaultStyle}>
+      <div style={{...defaultStyle,
+      }}>
         <img/>
-        <input type="text" onKeyUp={event => 
+        <input type="text" placeholder="Search your playlists..." onKeyUp={event => 
           this.props.onTextChange(event.target.value)}
           style={{...defaultStyle, 
             color: 'black', 
-            'font-size': '20px', 
-            padding: '10px'}}/>
+            height: "5vh",
+            width: "20vw",
+            padding: '10px',
+            borderRadius: "20px", 
+            marginRight: "3vw",
+            outline: "none"
+            }}/>
       </div>
     );
   }
@@ -70,22 +80,21 @@ class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
     return (
-      <div style={{...defaultStyle, 
+      <Card style={{...defaultStyle, 
         display: 'inline-block', 
-        width: "25%",
-        padding: '10px',
-        'background-color': isEven(this.props.index) 
-          ? '#C0C0C0' 
-          : '#808080'
+        width: "30vw",
+        padding: '2vw',
+        backgroundColor: "#353B3C"
         }}>
-        <h2>{playlist.name}</h2>
-        <img src={playlist.imageUrl} style={{width: '60px'}}/>
-        <ul style={{'margin-top': '10px', 'font-weight': 'bold'}}>
+              <h2 style={{marginBottom: "10vh"}}>{playlist.name}</h2>
+        <img alt="playlist-cover-collage" src={playlist.imageUrl} style={{width: '20vw', height: "35vh", marginLeft: "3vw"}}/>
+        <ul style={{'margin-top': '10px', 'font-weight': 'bold', listStyle: "none"}}>
           {playlist.songs.map(song => 
-            <li style={{'padding-top': '2px'}}>{song.name}</li>
+            <li style={{'padding-top': '3vh', fontSize: "2vh"}}>{song.name}</li>
           )}
         </ul>
-      </div>
+        <Button  block variant="primary" style={{marginTop: "5vh", height: "6vh"}}>Start Party</Button>
+      </Card>
     );
   }
 }
@@ -163,20 +172,27 @@ class SearchPlaylist extends Component {
           return matchesPlaylist || matchesSong
         }) : []
     return (
-      <div className="SearchPlaylist">
+      <div style={{justifyContent:'center', alignItems: "center", marginLeft: "3vw"}}>
         {this.state.user ?
         <div>
-          <h1 style={{...defaultStyle, 
-            'font-size': '54px',
-            'margin-top': '5px'
+            <h1 style={{marginTop: "10vh", marginBottom: "5vh", color: "#353B3C", marginLeft: "auto", marginRight: "auto", backgroundColor: "white", padding: "10px", width: "14vw", borderRadius: "20px"}}>Create a party</h1>
+            <div className="d-inline-flex w-100 mt-5 ml-auto justify-content-between mb-5">
+          <h1 style={{
+              color: "white",
+            fontSize: '3vh',
+           fontFamily : "Montserrat, sans-serif",
           }}>
-            {this.state.user.name}'s Playlists
+              <img src={spotify} alt="CUUE logo" style={{width: "3vw", marginRight: "1vw"}}/>
+            {this.state.user.name}
           </h1>
+          <div className="w-50">
           <PlaylistCounter playlists={playlistToRender}/>
           <HoursCounter playlists={playlistToRender}/>
+          </div>
           <Filter onTextChange={text => {
               this.setState({filterString: text})
             }}/>
+              </div>
           {playlistToRender.map((playlist, i) => 
             <Playlist playlist={playlist} index={i} />
           )}
@@ -185,7 +201,7 @@ class SearchPlaylist extends Component {
               ? 'http://localhost:8888/login' 
               : 'https://better-playlists-backend.herokuSearchPlaylist.com/login' }
           }
-          style={{padding: '20px', 'font-size': '50px', 'margin-top': '20px'}}>Sign in with Spotify</button>
+          style={{padding: '20px', 'fontSize': '50px', 'marginTop': '20px'}}>Sign in with Spotify</button>
         }
       </div>
     );

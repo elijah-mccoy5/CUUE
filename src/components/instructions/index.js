@@ -17,7 +17,7 @@ const Instructions = () => {
               <p className="p-2  mt-5" style={{fontSize: "3vh"}}><ArrowRightIcon/>After your party is started, search a song, and select your tune</p>
               </div>
               <Link to="/partycreation">
-                        <Button variant="light" size="lg" style={{ marginTop: "5vh"}}><img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify</Button> 
+                        <Button block variant="light" size="lg" style={{ marginTop: "5vh"}}><img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify</Button> 
                         </Link>               
             </section>
             <img className="instruction-image" alt="the app in action" src="https://isteam.wsimg.com/ip/6a3a64d4-f292-4124-b64e-5e762b277a78/Screen%20Shot%202020-04-12%20at%2011.54.18%20PM.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25"/>
