@@ -1,10 +1,129 @@
 import React, { Component, useState } from 'react';
 import queryString from 'query-string'; 
-import spotify from '../../assets/spotify.png'
-import {Button, Jumbotron, Card } from 'react-bootstrap'
-import logo from '../../assets/Jukebox_Fixed.png';
-import { Link } from 'react-router-dom'
+import { Card , Jumbotron, Button} from 'react-bootstrap';
+import ClearIcon from '@material-ui/icons/Clear';
+import { Avatar } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import SearchPlaylist from '../search-playlist-screen';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import Spotify from  'spotify-web-api-js'
+import spotify from '../../assets/spotify.png'
+
+
+const spotifyWebApi = new Spotify();
+
+const list = [
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+  {
+    title: 'Appointments',
+    icon: 'av-timer',
+    right: 76,
+  },
+  {
+    title: 'Trips',
+    icon: 'flight-takeoff',
+    right: 16,
+  }, // more items
+]
 
 
   class PartyCreation extends Component {
@@ -13,6 +132,7 @@ import SearchPlaylist from '../search-playlist-screen';
       this.state = {
         serverData: {},
         filterString: '', 
+        nowPlaying: { name: 'Not Checked', albumArt: '' }
       }
     }
 
@@ -67,11 +187,24 @@ import SearchPlaylist from '../search-playlist-screen';
           }
       })
       }))
-  
-    }
-    render() {
-      
 
+    }
+  
+
+    getNowPlaying(){
+      spotifyWebApi.getMyCurrentPlaybackState()
+        .then((response) => {
+          this.setState({
+            nowPlaying: { 
+                name: response.item.name, 
+                albumArt: response.item.album.images[0].url
+              }
+          });
+        })
+      }
+ 
+    render() {
+       
           return (
             <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
               {this.state.user ?
@@ -80,32 +213,56 @@ import SearchPlaylist from '../search-playlist-screen';
                       <Card.Body>
                           <Card style={{}}>
                               <Card.Body>
-                                  <h1 style={{marginTop: "1vh", color: "white", backgroundColor: "#353B3C", padding: "10px", width: "12vw", borderRadius: "20px", marginBottom: "6vh", alignSelf: "center",  marginLeft: "auto", marginRight: "auto"}}>Join a party</h1>
                                   <ul style={{listStyle: "none"}}>
-                                      <li>Jessica's Party</li>
-                                      <li>DOPe party time lol</li>
-                                      <li>Crazy beats</li>
-                                      <li>Lo-fi Type Beats</li>
+                                  {
+                                                  list.map((item, i) => (
+                                                    <li
+                                                      key={i}>
+                                                      <img src={{ name: item.icon }} alt="Icon"/>
+                                                      {item.title}
+                                                    <p>{item.right}</p>
+                                                      </li>
+                                                  ))
+                                                }
+                                                {/* <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                         <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                          <PeopleAltIcon/>
+                                          </li>
+                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                          <PeopleAltIcon/>
+                                          </li>
+                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                         <PeopleAltIcon/>  
+                                          </li>
+                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                         <PeopleAltIcon/>  
+                                          </li> */}
                                   </ul>
                               </Card.Body>
                           </Card>
-                      <SearchPlaylist/>
+                         <SearchPlaylist />
                   </Card.Body>
                   </Card>
-              </div> :
+              </div> :  <div>
                 <Button block onClick={() => {
                window.location = window.location.href.includes('localhost') 
                 ? 
                 'http://localhost:8888/login'
                 : 'https://cuue-web-backend.herokuapp.com/login'
             }} variant="light" size="lg" style={{ marginTop: "5vh"}}>
-                <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify</Button> 
-              }
+                <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify
+                </Button> 
+              
             </div>
+    }  
+     </div>
           );
         }
       }
-  
+      
 
 
  export default PartyCreation;

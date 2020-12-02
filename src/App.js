@@ -7,6 +7,7 @@ import Header from './components/header';
 import NoMatch from './screens/no-match-screen'
 import PartyCreation from './screens/party-creation-screen';
 import SearchPlaylist from './screens/search-playlist-screen';
+import PartyOptions from './screens/party-options-screen';
 
 
 function App() {
@@ -19,14 +20,15 @@ function App() {
          <Router>
         <Switch>
        <Route exact path="/dashboard" component={Dashboard}/>
-        <Route path="/" component={PartyCreation}/>
+        <Route exact path="/" component={PartyCreation}/>
         <Route path="/about"/>
         <Route path="/profile"/>
          <Route component={NoMatch}/>
          <Route path="/searchplaylist" component={SearchPlaylist}/>
+         <Route path="/party" component={PartyOptions}/>
         </Switch>
         </Router> 
-        {/* <PartyCreation/> */}
+        {/* <PartyOptions/> */}
       </Container>
     </>
   );

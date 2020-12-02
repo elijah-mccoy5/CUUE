@@ -11,7 +11,7 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                    <Nav.Link href="/partycreation">Create Party +</Nav.Link>
+                    <Nav.Link href="/">Create Party +</Nav.Link>
                     </Nav>
                     <Nav style={{marginRight: "30px", alignItems: "center"}}>
                         <NavDropdown title="Profile" id="basic-nav-dropdown" >

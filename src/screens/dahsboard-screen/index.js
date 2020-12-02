@@ -14,7 +14,7 @@ const Dashboard = () => {
                 className="c-flex text-left justify-content-center align-items-center ml-auto p-2 done" style={{marginTop: "4vh"}}>
                     <div  className="dash-words" style={{color: "white", marginTop: "5vh", width: "60vw", textAlign: "left", marginLeft: "5vw"}}>
                     <h2 style={{fontSize: "6vh", textAlign: "left", fontFamily: "Fugaz One', cursive"}}>Want more control?</h2>
-                      <Link to="/partycreation">
+                      <Link to="/">
                         <Button variant="light" size="lg" style={{ marginTop: "5vh"}}><img style={{ width: "3vw",}} className="mr-4 dash-button btn-doe" src={spotify} alt="spotify icon"/>Connect with Spotify</Button> 
                         </Link>               
                         <p style={{fontSize: "3vh", textAlign: "left", fontFamily: "font-family: 'Fugaz One', cursive", width: "55%", marginTop: "3vh"}} className="jumbo">Start controlling the music.</p> 

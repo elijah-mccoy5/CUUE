@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import { Card, Button } from 'react-bootstrap'
 import spotify from '../../assets/spotify.png';
-
+import {Link } from 'react-router-dom'
 
 
 let defaultStyle = {
@@ -93,7 +93,10 @@ class Playlist extends Component {
             <li style={{'padding-top': '3vh', fontSize: "2vh"}}>{song.name}</li>
           )}
         </ul>
-        <Button  block variant="primary" style={{marginTop: "5vh", height: "6vh"}}>Start Party</Button>
+        <Link to="/party">
+        <Button
+        block variant="primary" style={{marginTop: "5vh", height: "6vh"}}>Start Party</Button>
+        </Link>
       </Card>
     );
   }
@@ -120,6 +123,11 @@ class SearchPlaylist extends Component {
         name: data.display_name
       }
     }))
+
+    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: {'Authorization': 'Bearer ' + accessToken}
+    }).then(response => response.json())
+    .then(data => console.log(data))
 
     fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {'Authorization': 'Bearer ' + accessToken}
@@ -175,7 +183,6 @@ class SearchPlaylist extends Component {
       <div style={{justifyContent:'center', alignItems: "center", marginLeft: "3vw"}}>
         {this.state.user ?
         <div>
-            <h1 style={{marginTop: "10vh", marginBottom: "5vh", color: "#353B3C", marginLeft: "auto", marginRight: "auto", backgroundColor: "white", padding: "10px", width: "14vw", borderRadius: "20px"}}>Create a party</h1>
             <div className="d-inline-flex w-100 mt-5 ml-auto justify-content-between mb-5">
           <h1 style={{
               color: "white",
