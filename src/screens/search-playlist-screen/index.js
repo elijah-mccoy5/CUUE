@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import { Card, Button } from 'react-bootstrap'
 import spotify from '../../assets/spotify.png';
 import {Link } from 'react-router-dom'
+import { DonutLarge } from '@material-ui/icons';
 
 
 let defaultStyle = {
@@ -12,9 +13,9 @@ let defaultStyle = {
 let counterStyle = {...defaultStyle, 
   width: "40%", 
   display: 'inline-block',
-  'margin-bottom': '20px',
-  'font-size': '20px',
-  'line-height': '30px'
+  marginBottom: '20px',
+  fontSize: '20px',
+  lineHeight: '30px'
 }
 
 function isEven(number) {
@@ -44,7 +45,7 @@ class HoursCounter extends Component {
     let isTooLow = totalDurationHours < 40
     let hoursCounterStyle = {...counterStyle, 
       color: isTooLow ? 'red' : 'white',
-      'font-weight': isTooLow ? 'bold' : 'normal',
+      fontWeight: isTooLow ? 'bold' : 'normal',
     }
     return (
       <div style={hoursCounterStyle}>
@@ -88,9 +89,9 @@ class Playlist extends Component {
         }}>
               <h2 style={{marginBottom: "10vh"}}>{playlist.name}</h2>
         <img alt="playlist-cover-collage" src={playlist.imageUrl} style={{width: '20vw', height: "35vh", marginLeft: "3vw"}}/>
-        <ul style={{'margin-top': '10px', 'font-weight': 'bold', listStyle: "none"}}>
+        <ul style={{marginTop: '10px', fontWeight: 'bold', listStyle: "none"}}>
           {playlist.songs.map(song => 
-            <li style={{'padding-top': '3vh', fontSize: "2vh"}}>{song.name}</li>
+            <li key={song.id} style={{paddingTop: '3vh', fontSize: "2vh"}}>{song.name}</li>
           )}
         </ul>
         <Link to="/party">
@@ -124,11 +125,6 @@ class SearchPlaylist extends Component {
       }
     }))
 
-    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: {'Authorization': 'Bearer ' + accessToken}
-    }).then(response => response.json())
-    .then(data => console.log(data))
-
     fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {'Authorization': 'Bearer ' + accessToken}
     }).then(response => response.json())
@@ -151,6 +147,7 @@ class SearchPlaylist extends Component {
             .map(trackData => ({
               name: trackData.name,
               duration: trackData.duration_ms / 1000
+
             }))
         })
         return playlists
@@ -208,7 +205,7 @@ class SearchPlaylist extends Component {
               ? 'http://localhost:8888/login' 
               : 'https://better-playlists-backend.herokuSearchPlaylist.com/login' }
           }
-          style={{padding: '20px', 'fontSize': '50px', 'marginTop': '20px'}}>Sign in with Spotify</button>
+          style={{padding: "20px", fontSize: '50px', marginTop: '20px'}}>Sign in with Spotify</button>
         }
       </div>
     );

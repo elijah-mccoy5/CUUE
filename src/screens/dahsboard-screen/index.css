@@ -25,7 +25,7 @@
     padding-right: 450vw;
   }
   .btn-doe {
-    visibility: visible;
+    visibility: collapse;
   }
 }
 
@@ -34,10 +34,7 @@
     padding-right: 450vw;
   }
   .done-2 {
-    visibility: visible;
-  }
-  .btn-doe {
-    visibility: visible;
+    visibility: collapse;
   }
 }
 

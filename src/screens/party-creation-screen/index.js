@@ -10,120 +10,6 @@ import Spotify from  'spotify-web-api-js'
 import spotify from '../../assets/spotify.png'
 
 
-const spotifyWebApi = new Spotify();
-
-const list = [
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-  {
-    title: 'Appointments',
-    icon: 'av-timer',
-    right: 76,
-  },
-  {
-    title: 'Trips',
-    icon: 'flight-takeoff',
-    right: 16,
-  }, // more items
-]
 
 
   class PartyCreation extends Component {
@@ -132,15 +18,17 @@ const list = [
       this.state = {
         serverData: {},
         filterString: '', 
-        nowPlaying: { name: 'Not Checked', albumArt: '' }
       }
     }
 
     componentDidMount() {
       let parsed = queryString.parse(window.location.search);
       let accessToken = parsed.access_token;
+      
       if (!accessToken)
         return;
+        localStorage.setItem('access_token', accessToken)
+
       fetch('https://api.spotify.com/v1/me', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -149,6 +37,7 @@ const list = [
           name: data.display_name
         }
       }))
+      localStorage.setItem('user', this.state.user)
   
       fetch('https://api.spotify.com/v1/me/playlists', {
         headers: {'Authorization': 'Bearer ' + accessToken}
@@ -187,21 +76,10 @@ const list = [
           }
       })
       }))
+    
 
     }
   
-
-    getNowPlaying(){
-      spotifyWebApi.getMyCurrentPlaybackState()
-        .then((response) => {
-          this.setState({
-            nowPlaying: { 
-                name: response.item.name, 
-                albumArt: response.item.album.images[0].url
-              }
-          });
-        })
-      }
  
     render() {
        
@@ -214,17 +92,7 @@ const list = [
                           <Card style={{}}>
                               <Card.Body>
                                   <ul style={{listStyle: "none"}}>
-                                  {
-                                                  list.map((item, i) => (
-                                                    <li
-                                                      key={i}>
-                                                      <img src={{ name: item.icon }} alt="Icon"/>
-                                                      {item.title}
-                                                    <p>{item.right}</p>
-                                                      </li>
-                                                  ))
-                                                }
-                                                {/* <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                                <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                          <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
                                           <PeopleAltIcon/>
                                           </li>
@@ -239,7 +107,7 @@ const list = [
                                       <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                       <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
                                          <PeopleAltIcon/>  
-                                          </li> */}
+                                          </li>
                                   </ul>
                               </Card.Body>
                           </Card>

@@ -3,123 +3,107 @@ import React, { Component } from 'react';
 import { Card , Jumbotron, Button} from 'react-bootstrap';
 import ClearIcon from '@material-ui/icons/Clear';
 import AddIcon from '@material-ui/icons/Add';
-import Spotify from  'spotify-web-api-js'
+import {Link} from 'react-router-dom'
 import queryString from 'query-string'
+import axios from 'axios'
+import _ from 'lodash'
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-const spotifyWebApi = new Spotify();
+
+const refreshAuthLogic = failedRequest => axios.post('http://localhost:8888/callback',)
+.then(tokenRefresh => {
+    localStorage.setItem('access_token', tokenRefresh.data.token);
+    failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefresh.data.token;
+    console.log("asked for another refresh token")
+    return Promise.resolve();
+});
+createAuthRefreshInterceptor(axios, refreshAuthLogic);
+
+function getAccessToken(){
+  return localStorage.getItem('access_token');
+}
+
+
 
 class PartyOptions extends Component {
+  
     constructor(){
         super();
-        const params = this.getHashParams();
-        const token = params.access_token;
-        if (token) {
-          spotifyWebApi.setAccessToken(token);
-        }
         this.state = {
-          loggedIn: token ? true : false,
-          nowPlaying: { name: 'Not Checked', albumArt: '' }
+          currentlyPlaying: { name: 'Not Checked', image: '', is_playing: false, backgroundImage: '' }
         }
       }
-      getHashParams() {
-        var hashParams = {};
-        var e, r = /([^&;=]+)=?([^&;]*)/g,
-            q = window.location.hash.substring(1);
-        e = r.exec(q)
-        while (e) {
-           hashParams[e[1]] = decodeURIComponent(e[2]);
-           e = r.exec(q);
-        }
-        return hashParams;
-      }
-    componentDidMount(){
-      let parsed = queryString.parse(window.location.search);
-      let accessToken = parsed.access_token;
+componentDidMount(){
+  let parsed = queryString.parse(window.location.search);
+  let accessToken = parsed.access_token;
+  const token = localStorage.getItem('access_token' , accessToken)
+ if(!token) 
+  return;
+
+    axios.get('https://api.spotify.com/v1/me/player/currently-playing',{      
+      headers: {'Authorization': 'Bearer ' + token }
+    
+    })
+      .then((res) => {
+        console.log( "data", res.data )
+        this.setState({
+              currentlyPlaying:{
+                name: _.get(res.data.item,'name','Loading...'),
+                image: _.get(res.data.item, ['album','images','0','url']),
+                backgroundImage: _.get(res.data.item, ['album','images','3','url']),
+                is_playing: _.get(res.data, 'is_playing' ) ,
+                artist: _.get(res.data.item, ['artists', '0', 'name']) //data.is_playing
+              }
+             })
+      })
+      .then(() => {
+        console.log(this.state.currentlyPlaying.is_playing)
+        refreshAuthLogic()
+      })
+    } 
 
      
-    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: {'Authorization': 'Bearer ' + accessToken}
-    }).then(response => response.json())
-    .then(data => console.log(data))
-    .then(playlistData => {
-      let playlists = playlistData.items
-      let trackDataPromises = playlists.map(playlist => {
-        let responsePromise = fetch(playlist.tracks.href, {
-          headers: {'Authorization': 'Bearer ' + accessToken}
-        })
-        let trackDataPromise = responsePromise
-          .then(response => response.json())
-        return trackDataPromise
-      })
-      let allTracksDataPromises = 
-        Promise.all(trackDataPromises)
-      let playlistsPromise = allTracksDataPromises.then(trackDatas => {
-        trackDatas.forEach((trackData, i) => {
-          playlists[i].trackDatas = trackData.items
-            .map(item => item.track)
-            .map(trackData => ({
-              name: trackData.name,
-              duration: trackData.duration_ms / 1000
-              
-            }))
-        })
-        return playlists
-      })
-      return playlistsPromise
-    })
-    .then(playlists => this.setState({
-      playlists: playlists.map(item => {
-        return {
-          name: item.name,
-          imageUrl: item.images[0].url, 
-          songs: item.trackDatas.slice(0,3)
-        }
-    })
-    }))
-  
-    }
-      // getNowPlaying(){
-      //   fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      //     headers: {'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json', 'Accept': 'application/json'}
-      //   }).then(response => response.json())
-      //   .then(data => console.log(data))
-      //     .then((response) => {
-      //       this.setState({
-      //         nowPlaying: { 
-      //             name: response.item.name, 
-      //             albumArt: response.item.album.images[0].url
-      //           }
-      //       });
-      //     })
-      // }
     render(){
+
     return (
         <div>
-            <Jumbotron>
-              <img  src={this.state.nowPlaying.albumArt} alt="album-cover-mage" style={{height: "20vh", width: "50vh"}}/>
-                <div>
-                  
-                    <Avatar/>
+            <Jumbotron style={{height: "98vh", width: "100vw", marginBottom: "auto", backgroundColor: "#FE4871", boxSizing: "border-box", backgroundSize: "cover"}}>
+              <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" ,marginBottom: "10vh", zIndex: 2}}>
+            <Avatar/>
                     <h3>Party Name</h3>
-                    <ClearIcon/>
-                    <p>Leave party</p>
+                    <Link to="/partycreation">
+                    <Button variant="danger">Leave party</Button>
+                    </Link>
                     </div>
-                    <div>
-                        Now Playing: { this.state.nowPlaying.name }
-                            </div>
-                            <Button variant="primary"  onClick={() => this.getNowPlaying()}>
-            Check Now Playing
-          </Button>
-            </Jumbotron>
+                  {this.state.currentlyPlaying.is_playing  ? 
+                  <>
+                     
+                  <div style={{justifyContent: "center", alignItems: "center", display: "flex", marginBottom: "10vh"}}>
+                     <img  style={{height: "55vh", width: "30vw"}} src={this.state.currentlyPlaying.image} alt="currently playing song name"/>
+                  <div style={{display: "flex", flexDirection: "column", marginLeft: "5vw", justifyContent: "between"}}>
+                <h1>{this.state.currentlyPlaying.name}</h1>
+                  <p>{this.state.currentlyPlaying.artist}</p>
+                 <Button variant="primary">CUUE song<AddIcon/></Button>
+                  </div>
+                  </div>
             <Card>
                 <Card.Body>
                     <h1>Members</h1>
-                    <AddIcon/>
                 </Card.Body>
             </Card>
+                 </>
+                  :
+                  <Card style={{justifyContent: "center", alignItems: "center", display: "flex"}}> 
+                <Card.Body>
+                    <h1>Nothing is playing</h1>
+                </Card.Body>
+            </Card>
+    }
+          </Jumbotron>
+                   
         </div>
     );
     }
-};
+};  
 
 export default PartyOptions;

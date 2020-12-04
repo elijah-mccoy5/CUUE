@@ -21,11 +21,11 @@ function App() {
         <Switch>
        <Route exact path="/dashboard" component={Dashboard}/>
         <Route exact path="/" component={PartyCreation}/>
+        <Route path="/party" component={PartyOptions}/>
         <Route path="/about"/>
         <Route path="/profile"/>
          <Route component={NoMatch}/>
          <Route path="/searchplaylist" component={SearchPlaylist}/>
-         <Route path="/party" component={PartyOptions}/>
         </Switch>
         </Router> 
         {/* <PartyOptions/> */}
