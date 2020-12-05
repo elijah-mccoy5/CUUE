@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useCallback } from 'react';
 import queryString from 'query-string'; 
 import { Card , Jumbotron, Button} from 'react-bootstrap';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -6,8 +6,13 @@ import { Avatar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SearchPlaylist from '../search-playlist-screen';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import Spotify from  'spotify-web-api-js'
 import spotify from '../../assets/spotify.png'
+import {useDispatch, useSelector} from 'react-redux'
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import _ from 'lodash'
+import GetUserInfo from '../../actions/userInfoAction'
 
 
 
@@ -27,8 +32,8 @@ import spotify from '../../assets/spotify.png'
       
       if (!accessToken)
         return;
-        localStorage.setItem('access_token', accessToken)
 
+ 
       fetch('https://api.spotify.com/v1/me', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -38,7 +43,7 @@ import spotify from '../../assets/spotify.png'
         }
       }))
       localStorage.setItem('user', this.state.user)
-  
+      localStorage.setItem('access_token', accessToken)
       fetch('https://api.spotify.com/v1/me/playlists', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -82,55 +87,106 @@ import spotify from '../../assets/spotify.png'
   
  
     render() {
+      
        
-          return (
-            <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
-              {this.state.user ?
-              <div style={{ justifyContent: "center", alignItems: "center", top: 0}}>
-                  <Card className="playlist-card" style={{  backgroundColor: "#353B3C", width: "100vw", height: "100%",display: "flex", flexDirection: "row", top: 0}}>
-                      <Card.Body>
-                          <Card style={{}}>
-                              <Card.Body>
-                                  <ul style={{listStyle: "none"}}>
-                                                <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                         <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                          <PeopleAltIcon/>
-                                          </li>
-                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+       
+        return (
+       <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
+          {this.state.user ?
+          <div style={{ justifyContent: "center", alignItems: "center", backgroundColor: "#25283D",backgroundSize: "cover"}}>
+              <Card className="playlist-card" style={{  backgroundColor: "#25283D", width: "100vw", height: "100%",display: "flex", flexDirection: "row", top: 0}}>
+                  <Card.Body>
+                      <Card >
+                          <Card.Body>
+                              <ul style={{listStyle: "none"}}>
+                                            <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
                                       <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                          <PeopleAltIcon/>
-                                          </li>
-                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                         <PeopleAltIcon/>  
-                                          </li>
-                                      <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                         <PeopleAltIcon/>  
-                                          </li>
-                                  </ul>
-                              </Card.Body>
-                          </Card>
-                         <SearchPlaylist />
-                  </Card.Body>
-                  </Card>
-              </div> :  <div>
-                <Button block onClick={() => {
-               window.location = window.location.href.includes('localhost') 
-                ? 
-                'http://localhost:8888/login'
-                : 'https://cuue-web-backend.herokuapp.com/login'
-            }} variant="light" size="lg" style={{ marginTop: "5vh"}}>
-                <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify
-                </Button> 
-              
-            </div>
+                                      <PeopleAltIcon/>
+                                      </li>
+                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                      <PeopleAltIcon/>
+                                      </li>
+                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                      <PeopleAltIcon/>  
+                                      </li>
+                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
+                                      <PeopleAltIcon/>  
+                                      </li>
+                              </ul>
+                          </Card.Body>
+                      </Card>
+                      <SearchPlaylist />
+              </Card.Body>
+              </Card>
+          </div> :  <div style={{backgroundColor: "#FE4871", width: "100vw", height: "100vh", alignItems: 'center', justifyContent: "center", display: "flex"}}>
+            <Button onClick={() => {
+            window.location = window.location.href.includes('localhost') 
+            ? 
+            'http://localhost:8888/login'
+            : 'https://cuue-web-backend.herokuapp.com/login'
+        }} variant="light" size="lg" style={{ alignSelf: "center"}}>
+            <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify
+            </Button> 
+          
+        </div>
     }  
      </div>
           );
         }
       }
+
+      export default PartyCreation;
       
-
-
- export default PartyCreation;
+   // const PartyCreation = () => {
+        //     const dispatch = useDispatch();
+        //     const userInfoData = useSelector(state => state.u)
+          
+          
+        //     const FetchData = useCallback(()=> {
+        //       dispatch(GetUserInfo())
+        //     },[dispatch])
+          
+        //     useEffect(() => {
+        //       FetchData()
+        //     },[FetchData])
+          
+          
+        //     const ShowData = () => {
+        //       if(_.isEmpty(userInfoData)){
+        //         console.log(userInfoData)
+        //         return userInfoData.data.map(song => (
+        //           <div className="song-contents" >
+        //                              <img  className="song-image"  alt="currently playing song name"/>
+        //                           <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
+        //         <h1 className="song-name">{song.item.name}</h1>
+        //                            <p className="song-artist">Song artist Here</p>
+        //                          <Button className="cuue-button" variant="primary">CUUE <AddIcon style={{fontSize: "3vh", marginBottom: "1vh"}}/></Button>
+        //                             <div className="player-controls" >
+        //                                <SkipPreviousIcon id="control-buttons"/>
+        //                              <PauseCircleFilledIcon id="control-buttons"  />
+        //                                  <SkipNextIcon id="control-buttons" />
+        //                               </div>
+                                  
+                                          
+        //                              </div>
+        //                             </div>
+        //         ))   
+        //                   }
+        //                   if (userInfoData.loading){
+        //         return <p>Loading...</p>
+        //       }
+        //       if(userInfoData.errorMsg !== ""){
+        //       return <p>{userInfoData.errorMsg}</p>
+        //       }
+            
+        //     }
+        //   return(
+        //     <div>
+        //       {ShowData()}
+        //   </div>
+        //   )
+        // }
+        // export default PartyCreation;

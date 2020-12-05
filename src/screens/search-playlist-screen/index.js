@@ -1,9 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useCallback } from 'react';
 import queryString from 'query-string';
 import { Card, Button } from 'react-bootstrap'
 import spotify from '../../assets/spotify.png';
 import {Link } from 'react-router-dom'
-import { DonutLarge } from '@material-ui/icons';
+import {useSelector, useDispatch} from 'react-redux'
+import GetUserPlaylist from '../../actions/userInfoAction'
+import _ from 'lodash'
+import AddIcon from '@material-ui/icons/Add';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 
 
 let defaultStyle = {
@@ -85,7 +92,7 @@ class Playlist extends Component {
         display: 'inline-block', 
         width: "30vw",
         padding: '2vw',
-        backgroundColor: "#353B3C"
+        backgroundColor: "#25283D",
         }}>
               <h2 style={{marginBottom: "10vh"}}>{playlist.name}</h2>
         <img alt="playlist-cover-collage" src={playlist.imageUrl} style={{width: '20vw', height: "35vh", marginLeft: "3vw"}}/>
@@ -211,5 +218,53 @@ class SearchPlaylist extends Component {
     );
   }
 }
-
 export default SearchPlaylist;
+
+// const SearchPlaylist = () => {
+//   const dispatch = useDispatch();
+//   const userPlaylistData = useSelector(state => state.playlistData)
+
+
+//   const FetchData = useCallback(()=> {
+//     dispatch(GetUserPlaylist())
+//   },[dispatch])
+
+//   useEffect(() => {
+//     FetchData()
+//   },[FetchData])
+//   const ShowData = () => {
+//       if(_.isEmpty(userPlaylistData.tracks)){
+//         console.log(userPlaylistData)
+//         return userPlaylistData.data.map(playlist => (
+//           <div className="song-contents" >
+//                              <img  className="song-image"  alt="currently playing song name"/>
+//                           <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
+//         <h1 className="song-name">{playlist.tracks.href}</h1>
+//                            <p className="song-artist">Song artist Here</p>
+//                          <Button className="cuue-button" variant="primary">CUUE <AddIcon style={{fontSize: "3vh", marginBottom: "1vh"}}/></Button>
+//                             <div className="player-controls" >
+//                                <SkipPreviousIcon id="control-buttons"/>
+//                              <PauseCircleFilledIcon id="control-buttons"  />
+//                                  <SkipNextIcon id="control-buttons" />
+//                               </div>
+                          
+                                  
+//                              </div>
+//                             </div>
+//         ))   
+//                   }
+//                   if (userPlaylistData.loading){
+//         return <p>Loading...</p>
+//       }
+//       if(userPlaylistData.errorMsg !== ""){
+//       return <p>{userPlaylistData.errorMsg}</p>
+//       }
+    
+//     }
+//   return(
+//     <div>
+//       {ShowData()}
+//   </div>
+//   )
+// }
+// export default SearchPlaylist;
