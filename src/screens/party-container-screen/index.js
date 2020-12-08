@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useCallback } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import queryString from 'query-string'; 
 import { Card , Jumbotron, Button} from 'react-bootstrap';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Avatar } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import SearchPlaylist from '../search-playlist-screen';
+import SearchPlaylist from '../playlist-screen';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import spotify from '../../assets/spotify.png'
 import {useDispatch, useSelector} from 'react-redux'
@@ -12,12 +12,49 @@ import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import _ from 'lodash'
-import GetUserInfo from '../../actions/userInfoAction'
+import { db } from '../../firebase';
+import {Link} from 'react-router-dom'
 
 
 
+const AllParties = () => {
+  const [channels, setChannels] = useState([]);
 
-  class PartyCreation extends Component {
+  useEffect(() => {
+      db.collection("parties")
+      .onSnapshot(snapshot => {
+          setChannels(
+            snapshot.docs.map(doc => ({
+                  id: doc.id,
+                  name: doc.data().name,
+            }))
+          )
+      })
+    },[])
+return(
+  <div>
+    <Card >
+  <Card.Body >
+      <ul style={{listStyle: "none"}}>
+        {channels.map(channel => (
+          <div>
+            <Link to={`/party/${channel.id}`}>
+            <li key={channel.id} style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between", width:'100%'}}>
+            <h1 style={{ fontSize: "3vh", color: "black", underline: "none"}}>{channel.name}</h1> 
+            <PeopleAltIcon/>
+            </li>
+            <hr/>
+            </Link>
+            </div>
+        ))}
+      </ul>
+  </Card.Body>
+</Card></div>
+);
+
+}
+
+  class PartyContainer extends Component {
     constructor() {
       super();
       this.state = {
@@ -33,7 +70,7 @@ import GetUserInfo from '../../actions/userInfoAction'
       if (!accessToken)
         return;
 
- 
+        localStorage.setItem('access_token', accessToken)
       fetch('https://api.spotify.com/v1/me', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -42,8 +79,7 @@ import GetUserInfo from '../../actions/userInfoAction'
           name: data.display_name
         }
       }))
-      localStorage.setItem('user', this.state.user)
-      localStorage.setItem('access_token', accessToken)
+  
       fetch('https://api.spotify.com/v1/me/playlists', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -88,36 +124,14 @@ import GetUserInfo from '../../actions/userInfoAction'
  
     render() {
       
-       
-       
+      
         return (
        <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
           {this.state.user ?
-          <div style={{ justifyContent: "center", alignItems: "center", backgroundColor: "#25283D",backgroundSize: "cover"}}>
-              <Card className="playlist-card" style={{  backgroundColor: "#25283D", width: "100vw", height: "100%",display: "flex", flexDirection: "row", top: 0}}>
+          <div style={{ justifyContent: "center", alignItems: "center", backgroundColor: "#FE4871", width: "100vw"}}>
+              <Card style={{backgroundColor: "#FE4871"}} >
                   <Card.Body>
-                      <Card >
-                          <Card.Body>
-                              <ul style={{listStyle: "none"}}>
-                                            <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                      <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                      <PeopleAltIcon/>
-                                      </li>
-                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                      <PeopleAltIcon/>
-                                      </li>
-                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                      <PeopleAltIcon/>  
-                                      </li>
-                                  <li style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px",  display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                                  <h1 style={{ fontSize: "3vh"}}>Jessica's Party</h1> 
-                                      <PeopleAltIcon/>  
-                                      </li>
-                              </ul>
-                          </Card.Body>
-                      </Card>
+                      <AllParties/>
                       <SearchPlaylist />
               </Card.Body>
               </Card>
@@ -138,9 +152,9 @@ import GetUserInfo from '../../actions/userInfoAction'
         }
       }
 
-      export default PartyCreation;
+      export default PartyContainer;
       
-   // const PartyCreation = () => {
+   // const PartyContainer = () => {
         //     const dispatch = useDispatch();
         //     const userInfoData = useSelector(state => state.u)
           
@@ -189,4 +203,4 @@ import GetUserInfo from '../../actions/userInfoAction'
         //   </div>
         //   )
         // }
-        // export default PartyCreation;
+        // export default PartyContainer;

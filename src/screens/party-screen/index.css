@@ -24,11 +24,11 @@
     margin-top: 2vh;
   }
   .cuue-button {
-    margin-top: 5px;
+    margin-top: 1vh;
     height: 6vh;
     font-size: 3vh;
     align-items: center;
-    width: 30vw;
+    width: 50vw;
   }
   .player-controls {
     margin-top: 2vh;
@@ -48,13 +48,24 @@
   .song-name {
     font-size: 3vh;
   }
+  .cuue-button {
+    margin-top: 5vh;
+    height: 6vh;
+    font-size: 3vh;
+    align-items: center;
+    width: 50vw;
+  }
+  #control-buttons {
+    margin-top: 3vh;
+    font-size: 11vh;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .song-image {
-    height: 20vh;
-    width: 40vw;
-    margin-right: 5vw;
+    height: 39vh;
+    width: 49vw;
+    margin-right: 1vw;
   }
   .song-name {
     font-size: 4vh;

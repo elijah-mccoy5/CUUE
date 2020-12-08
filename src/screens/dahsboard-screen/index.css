@@ -24,8 +24,8 @@
   .dash-words {
     padding-right: 450vw;
   }
-  .btn-doe {
-    visibility: collapse;
+  .button {
+    visibility: visible;
   }
 }
 
@@ -35,6 +35,8 @@
   }
   .done-2 {
     visibility: collapse;
+  }
+  .button {
   }
 }
 
@@ -46,6 +48,9 @@
   .done-2 {
     visibility: collapse;
   }
+  .button {
+    visibility: visible;
+  }
 }
 
 @media only screen and (min-width: 992px) {
@@ -54,6 +59,9 @@
   }
   .done-2 {
     visibility: collapse;
+  }
+  .button {
+    visibility: visible;
   }
 }
 
@@ -64,6 +72,9 @@
     padding-right: 0;
   }
   .done-2 {
+    visibility: visible;
+  }
+  .button {
     visibility: visible;
   }
 }

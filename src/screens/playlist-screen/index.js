@@ -1,18 +1,71 @@
-import React, { Component, useEffect, useCallback } from 'react';
+import React, { Component, useEffect, useCallback, useState } from 'react';
 import queryString from 'query-string';
-import { Card, Button } from 'react-bootstrap'
+import { Card, Button, Form, Alert } from 'react-bootstrap'
 import spotify from '../../assets/spotify.png';
+import logo from '../../assets/Jukebox_Fixed.png';
 import {Link } from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
-import GetUserPlaylist from '../../actions/userInfoAction'
+import GetUserPlaylist from '../../redux/actions/userInfoAction'
 import _ from 'lodash'
+import {useHistory} from 'react-router-dom'
 import AddIcon from '@material-ui/icons/Add';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import './index.css'
+import { db } from '../../firebase';
+
+const GeneratParty = () => {
+  const [channels, setChannels] = useState([]);
+  const [partyName, setPartyName] = useState('');
+  const history = useHistory();
+
+const makeParty = (e) => {
+ const user = localStorage.getItem('user');
+  e.preventDefault()
+  if(partyName !== ''){
+  db.collection("parties").add({
+    name: partyName,
+    host: user
+
+}).then(function(docRef) {
+  const partyRoom = docRef.id;
+  history.push(`/party/${partyRoom}`)
+})
+}else{
+ window.alert("Enter a name for the party")
+}
+}
 
 
+  useEffect(() => {
+      db.collection("parties")
+      .onSnapshot(snapshot => {
+          setChannels(
+            snapshot.docs.map(doc => ({
+                  id: doc.id,
+                  name: doc.data().name,
+            }))
+          )
+      })
+    },[])
+return(
+  <div>
+        <Form onSubmit={makeParty}>
+        <input
+         onChange={e => setPartyName(e.target.value)}
+        className='party-name'
+        />
+         </Form>
+         
+         <Button
+     onClick={makeParty}
+        variant="warning" className="start-party-btn">Start Party</Button>
+    </div>
+);
+
+}
 let defaultStyle = {
   color: '#fff',
   fontFamily: 'Montserrat, sans-serif'
@@ -33,8 +86,8 @@ class PlaylistCounter extends Component {
   render() {
     let playlistCounterStyle = counterStyle
     return (
-      <div style={playlistCounterStyle}>
-        <h2>{this.props.playlists.length} playlists</h2>
+      <div>
+        <h2  className="playlist-count">{this.props.playlists.length} playlists</h2>
       </div>
     );
   }
@@ -50,13 +103,10 @@ class HoursCounter extends Component {
     }, 0)
     let totalDurationHours = Math.round(totalDuration/60)
     let isTooLow = totalDurationHours < 40
-    let hoursCounterStyle = {...counterStyle, 
-      color: isTooLow ? 'red' : 'white',
-      fontWeight: isTooLow ? 'bold' : 'normal',
-    }
+ 
     return (
-      <div style={hoursCounterStyle}>
-        <h2>{totalDurationHours} hours</h2>
+      <div>
+        <h2 className="playlist-hours">{totalDurationHours} hours</h2>
       </div>
     );
   }
@@ -70,15 +120,7 @@ class Filter extends Component {
         <img/>
         <input type="text" placeholder="Search your playlists..." onKeyUp={event => 
           this.props.onTextChange(event.target.value)}
-          style={{...defaultStyle, 
-            color: 'black', 
-            height: "5vh",
-            width: "20vw",
-            padding: '10px',
-            borderRadius: "20px", 
-            marginRight: "3vw",
-            outline: "none"
-            }}/>
+          className="playlist-search"/>
       </div>
     );
   }
@@ -88,23 +130,15 @@ class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
     return (
-      <Card style={{...defaultStyle, 
-        display: 'inline-block', 
-        width: "30vw",
-        padding: '2vw',
-        backgroundColor: "#25283D",
-        }}>
-              <h2 style={{marginBottom: "10vh"}}>{playlist.name}</h2>
-        <img alt="playlist-cover-collage" src={playlist.imageUrl} style={{width: '20vw', height: "35vh", marginLeft: "3vw"}}/>
-        <ul style={{marginTop: '10px', fontWeight: 'bold', listStyle: "none"}}>
+      <Card className="playlist-card-container">
+              <h2 className="playlist-name">{playlist.name}</h2>
+        <img alt="playlist-cover-collage" src={playlist.imageUrl} className="playlist-image"/>
+        <ul className="song-preview">
           {playlist.songs.map(song => 
-            <li key={song.id} style={{paddingTop: '3vh', fontSize: "2vh"}}>{song.name}</li>
+            <li key={song.id} className="song-names">{song.name}</li>
           )}
         </ul>
-        <Link to="/party">
-        <Button
-        block variant="primary" style={{marginTop: "5vh", height: "6vh"}}>Start Party</Button>
-        </Link>
+       <GeneratParty/>
       </Card>
     );
   }
@@ -130,8 +164,15 @@ class SearchPlaylist extends Component {
       user: {
         name: data.display_name
       }
-    }))
-
+    })).then(() => {
+      db.collection("user").add({
+        name: this.state.user.name
+  })
+}).then(function(docRef) {
+console.log(docRef)
+      })
+    
+  
     fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {'Authorization': 'Bearer ' + accessToken}
     }).then(response => response.json())
@@ -160,8 +201,7 @@ class SearchPlaylist extends Component {
         return playlists
       })
       return playlistsPromise
-    })
-    .then(playlists => this.setState({
+    }).then(playlists => this.setState({
       playlists: playlists.map(item => {
         return {
           name: item.name,
@@ -172,7 +212,9 @@ class SearchPlaylist extends Component {
     }))
 
   }
+  
   render() {
+ 
     let playlistToRender = 
       this.state.user && 
       this.state.playlists 
@@ -184,19 +226,15 @@ class SearchPlaylist extends Component {
           return matchesPlaylist || matchesSong
         }) : []
     return (
-      <div style={{justifyContent:'center', alignItems: "center", marginLeft: "3vw"}}>
+      <div style={{justifyContent:'center', alignItems: "center", marginLeft: "3vw", backgroundColor: "#FE4871"}}>
         {this.state.user ?
         <div>
             <div className="d-inline-flex w-100 mt-5 ml-auto justify-content-between mb-5">
-          <h1 style={{
-              color: "white",
-            fontSize: '3vh',
-           fontFamily : "Montserrat, sans-serif",
-          }}>
-              <img src={spotify} alt="CUUE logo" style={{width: "3vw", marginRight: "1vw"}}/>
+            <img src={logo} alt="CUUE logo" className="spotify"/>
+            <div className="w-50">
+          <h1 className="playlist-hours">
             {this.state.user.name}
           </h1>
-          <div className="w-50">
           <PlaylistCounter playlists={playlistToRender}/>
           <HoursCounter playlists={playlistToRender}/>
           </div>
@@ -204,15 +242,13 @@ class SearchPlaylist extends Component {
               this.setState({filterString: text})
             }}/>
               </div>
+              <div className="all-playlists">
           {playlistToRender.map((playlist, i) => 
+      
             <Playlist playlist={playlist} index={i} />
           )}
-        </div> : <button onClick={() => {
-            window.location = window.location.href.includes('localhost') 
-              ? 'http://localhost:8888/login' 
-              : 'https://better-playlists-backend.herokuSearchPlaylist.com/login' }
-          }
-          style={{padding: "20px", fontSize: '50px', marginTop: '20px'}}>Sign in with Spotify</button>
+             </div>
+        </div> :[]
         }
       </div>
     );

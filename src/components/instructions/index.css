@@ -1,46 +1,129 @@
-.instruction-image {
+.instruction-container {
+  display: flex;
+  flex-direction: column;
   align-self: center;
-  height: 100vh;
+  position: absolute;
+  justify-content: center;
+}
+
+.main-instruction {
+  display: flex;
+  flex-direction: row;
+  font-family: "Space Mono", monospace;
 }
 @media only screen and (max-width: 600px) {
   .instruction-image {
+    width: 0vw;
+    height: 0vh;
     visibility: collapse;
   }
+  .instruction-container {
+    width: 88vw;
+  }
+  .main-instruction {
+    margin-bottom: 1vh;
+    font-size: 2vh;
+  }
+  .button {
+    margin-top: 5vh;
+  }
+  .spotify {
+    height: 5vh;
+    margin-right: 5vw;
+  }
+  #spotify {
+    height: 5vh;
+    margin-right: 1vw;
+  }
+}
+.jumbo-header {
+  justify-content: center;
+  align-self: center;
+  font-family: "Fugaz One";
 }
 
 @media only screen and (min-width: 600px) {
   .instruction-image {
-    width: 20vw;
-    height: 64vh;
-  }
-  .instruction-image {
+    width: 0vw;
+    height: 0vh;
     visibility: collapse;
+  }
+  .instruction-container {
+    width: 85vw;
+  }
+  .main-instruction {
+    margin-bottom: 1vh;
+    font-size: 2vh;
+  }
+  .button {
+    margin-top: 5vh;
+  }
+  .spotify {
+    height: 4vh;
+    margin-right: 1vw;
+  }
+  #spotify {
+    height: 5vh;
+    margin-right: 1vw;
   }
 }
 
 @media only screen and (min-width: 768px) {
   .instruction-image {
-    width: 28vw;
-    height: 75vh;
+    width: 0vw;
+    height: 0vh;
+  }
+  .instruction-container {
+    width: 90vw;
+  }
+  #spotify {
+    height: 5vh;
+    margin-right: 1vw;
   }
 }
 
 @media only screen and (min-width: 992px) {
   .instruction-image {
-    width: 30vw;
-    height: 80vh;
-  }
-  .instruction-image {
+    width: 0vw;
+    height: 0vh;
     visibility: visible;
+  }
+  .instruction-container {
+    width: 75vw;
+  }
+  .main-instruction {
+    margin-bottom: 1vh;
+    font-size: 2vh;
+  }
+  #spotify {
+    height: 5vh;
+    margin-right: 1vw;
   }
 }
 
 @media only screen and (min-width: 1200px) {
   .instruction-image {
-    width: 28vw;
-    height: 85vh;
+    width: 32vw;
+    height: 95vh;
   }
-  .instruction-image {
-    visibility: visible;
+  .instruction-container {
+    width: 70vw;
+  }
+  .jumbo-header {
+    font-size: 8vh;
+    margin-bottom: 10vh;
+  }
+  .main-instruction {
+    font-size: 3vh;
+  }
+  .instruction-words {
+    margin-right: 8vw;
+  }
+  .instruction-item {
+    margin-bottom: 10vh;
+  }
+  #spotify {
+    height: 5vh;
+    margin-right: 1vw;
   }
 }

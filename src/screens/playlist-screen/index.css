@@ -1,0 +1,251 @@
+.playlist-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  margin-bottom: 3vh;
+  background-color: #2e1c2b;
+}
+.playlist-image {
+  justify-content: center;
+  align-self: center;
+}
+.all-playlists {
+  justify-content: space-around;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 90vw;
+}
+.song-names {
+  text-align: center;
+  color: white;
+  font-family: "Varela", sans-serif;
+}
+.song-preview {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+.playlist-name {
+  color: white;
+  font-family: "Varela", sans-serif;
+  align-self: center;
+}
+.start-party-btn {
+  color: white;
+  align-self: center;
+  justify-content: center;
+}
+.playlist-hours {
+  font-family: "Varela", sans-serif;
+  color: white;
+}
+.playlist-count {
+  font-family: "Varela", sans-serif;
+  color: white;
+}
+.party-name-visible {
+  height: 0vh;
+  width: 0vw;
+}
+.party-name-invisible {
+  height: 5vh;
+  width: 80vw;
+}
+@media only screen and (max-width: 600px) {
+  .playlist-card-container {
+    width: 90vw;
+  }
+  .playlist-image {
+    height: 40vh;
+    width: 75vw;
+  }
+  .playlist-name {
+    font-size: 5vh;
+    margin-bottom: 3vh;
+    margin-top: 2vh;
+  }
+  .playlist-search {
+    height: 4vh;
+    width: 30vw;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 2vh;
+  }
+  .song-names {
+    font-size: 3vh;
+    margin-top: 2vh;
+  }
+  .start-party-btn {
+    width: 50vw;
+    height: 6vh;
+    font-size: 3vh;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+  }
+  .playlist-hours {
+    font-size: 2vh;
+  }
+  .playlist-count {
+    font-size: 2vh;
+  }
+  .spotify {
+    height: 12vh;
+  }
+  .party-name {
+    width: 80vw;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .playlist-card-container {
+    width: 65vw;
+  }
+  .playlist-hours {
+    font-size: 3vh;
+  }
+  .playlist-count {
+    font-size: 3vh;
+  }
+  .spotify {
+    height: 20vh;
+  }
+  .song-names {
+    font-size: 2vh;
+    margin-top: 2vh;
+  }
+  .start-party-btn {
+    width: 50vw;
+    height: 6vh;
+    font-size: 3vh;
+    text-align: center;
+    align-items: center;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+    padding-bottom: 1vh;
+  }
+  .playlist-image {
+    width: 55vw;
+    height: 40vh;
+  }
+  .playlist-name {
+    margin-top: 2vh;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .playlist-card-container {
+    width: 80vw;
+  }
+  .playlist-hours {
+    font-size: 3vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+  .playlist-count {
+    font-size: 3vh;
+  }
+  .playlist-image {
+    width: 75vw;
+    height: 75vh;
+  }
+  .spotify {
+    height: 18vh;
+  }
+  .song-names {
+    font-size: 2vh;
+    margin-top: 2vh;
+  }
+  .start-party-btn {
+    width: 50vw;
+    height: 6vh;
+    font-size: 3vh;
+    text-align: center;
+    align-items: center;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+    padding-bottom: 1vh;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .playlist-card-container {
+    width: 90vw;
+  }
+  .playlist-hours {
+    font-size: 3vh;
+  }
+  .playlist-count {
+    font-size: 3vh;
+  }
+  .spotify {
+    height: 20vh;
+  }
+  .song-names {
+    font-size: 2vh;
+    margin-top: 2vh;
+  }
+  .start-party-btn {
+    width: 50vw;
+    height: 6vh;
+    font-size: 3vh;
+    text-align: center;
+    align-items: center;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+    padding-bottom: 1vh;
+  }
+  .playlist-image {
+    width: 65vw;
+    height: 75vh;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .playlist-card-container {
+    width: 28vw;
+    height: 80vh;
+  }
+  .playlist-image {
+    height: 39vh;
+    width: 22vw;
+  }
+  .song-names {
+    font-size: 2vh;
+    margin-top: 3vh;
+  }
+  .start-party-btn {
+    width: 18vw;
+    height: 6vh;
+    font-size: 2vh;
+    margin-top: 1vh;
+  }
+  .playlist-name {
+    font-size: 4vh;
+    margin-bottom: 3vh;
+  }
+  .playlist-hours {
+    margin-top: 2vh;
+    font-size: 5vh;
+    margin-bottom: 2vh;
+  }
+  .playlist-count {
+    font-size: 5vh;
+  }
+  .playlist-search {
+    color: black;
+    height: 5vh;
+    width: 50vw;
+    padding: 10px;
+    border-radius: 20px;
+    margin-right: 3vw;
+    outline: none;
+  }
+  .spotify {
+    height: 25vh;
+  }
+}
