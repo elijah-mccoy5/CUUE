@@ -17,6 +17,12 @@ export function AuthProvider({children}){
     const signup = (email, password) => {
             return auth.createUserWithEmailAndPassword(email, password)
     }
+    const login = (email, password) => {
+        return auth.signInWithEmailAndPassword(email, password)
+}
+const logout = () => {
+    return auth.signOut();
+}
     useEffect(() => {
     // Unsubscribes to useEffect and ensures that users dont create multiple accounts on accident
    
@@ -34,7 +40,9 @@ export function AuthProvider({children}){
     // This value variable is made to pass the signup function and currentUser as a single prop, to be processd and authenticated asynchronously with firebase
         const value = {
             currentUser,
-            signup
+            signup,
+            logout,
+            login
         }
 return(
 //This AuthContext.Provider tag isto make the react app aware that there ARE authentication conditons

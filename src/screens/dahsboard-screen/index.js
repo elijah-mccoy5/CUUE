@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Container , Button, Jumbotron} from 'react-bootstrap';
 import logo from '../../assets/Jukebox_Fixed.png';
@@ -5,15 +6,16 @@ import spotify from '../../assets/spotify.png';
 import { Link } from 'react-router-dom'
 import './index.css'
 import Instructions from '../../components/instructions';
+import Header from '../../components/header';
 
 const Dashboard = () => {
     return (
-      <>
-            <Jumbotron style={{position: "absolute", top: 0, height: "70vh", backgroundColor: "#FE4871", overflow: "hidden"}} className="w-100 d-flex justify-content-center">
+      <div style={{overflow: "hidden", width: "100vw"}}>
+            <Jumbotron style={{position: "absolute", height: "70vh", top: 0, backgroundColor: "#FE4871", overflow: "hidden"}} className="w-100 d-flex justify-content-center">
                 <Container 
                 className="c-flex text-left justify-content-center align-items-center ml-auto p-2 done" style={{marginTop: "4vh"}}>
                     <div  className="dash-words" style={{color: "white", marginTop: "5vh", width: "60vw", textAlign: "left", marginLeft: "5vw"}}>
-                    <h2 style={{fontSize: "6vh", textAlign: "left", fontFamily: "Fugaz One', cursive"}}>Want more control?</h2>            
+                    <h2 style={{fontSize: "6vh", textAlign: "left", fontFamily: "Fugaz One', cursive", color: "white"}}>Want more control?</h2>            
                    
                      <p style={{fontSize: "3vh", textAlign: "left", fontFamily: "font-family: 'Fugaz One', cursive", width: "55%", marginTop: "3vh"}} className="jumbo">Start controlling the music.</p> 
                      <Link to="/">
@@ -25,10 +27,10 @@ const Dashboard = () => {
                 <img className="dashboard-logo"  alt="CUUE Logo" src={logo}/>
                 </div>
             </Jumbotron>
-            <Container style={{position: "absolute", marginTop: "10vh"}}>
+            <Container style={{position: "absolute", marginTop: "10vh", marginLeft: "auto", marginRight: "auto"}}>
             <Instructions/>
             </Container>
-            </>
+            </div>
     );
 };
 

@@ -13,8 +13,14 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import _ from 'lodash'
 import { db } from '../../firebase';
+import Header from '../../components/header'
 import {Link} from 'react-router-dom'
+import SpotifyWebApi from 'spotify-web-api-js'
+import axios from 'axios'
 
+
+
+const spotifyApi = new SpotifyWebApi();
 
 
 const AllParties = () => {
@@ -22,11 +28,12 @@ const AllParties = () => {
 
   useEffect(() => {
       db.collection("parties")
-      .onSnapshot(snapshot => {
+      .onSnapshot( snapshot => {
           setChannels(
             snapshot.docs.map(doc => ({
                   id: doc.id,
                   name: doc.data().name,
+                  people: doc.data().people
             }))
           )
       })
@@ -41,7 +48,7 @@ return(
             <Link to={`/party/${channel.id}`}>
             <li key={channel.id} style={{height: "5vh", borderBottom: "1px", borderColor: "gray", padding: "10px", display: "flex", flexDirection: "row", justifyContent: "space-between", width:'100%'}}>
             <h1 style={{ fontSize: "3vh", color: "black", underline: "none"}}>{channel.name}</h1> 
-            <PeopleAltIcon/>
+          <p> {channel.people > 0 ? channel.people : 0 }<PeopleAltIcon/></p> 
             </li>
             <hr/>
             </Link>
@@ -53,6 +60,7 @@ return(
 );
 
 }
+
 
   class PartyContainer extends Component {
     constructor() {
@@ -66,11 +74,18 @@ return(
     componentDidMount() {
       let parsed = queryString.parse(window.location.search);
       let accessToken = parsed.access_token;
-      
-      if (!accessToken)
-        return;
+      let refreshToken = parsed.refresh_token
 
-        localStorage.setItem('access_token', accessToken)
+      localStorage.setItem('access_token', accessToken)
+      localStorage.setItem('refresh_token', refreshToken)
+
+      if (!accessToken)
+      return;
+      console.log(accessToken) 
+      spotifyApi.setAccessToken(accessToken)
+     
+     
+
       fetch('https://api.spotify.com/v1/me', {
         headers: {'Authorization': 'Bearer ' + accessToken}
       }).then(response => response.json())
@@ -78,7 +93,14 @@ return(
         user: {
           name: data.display_name
         }
-      }))
+      }) &&
+      db.collection("user").add({
+        name: data.display_name,
+    
+    })
+
+      )
+     
   
       fetch('https://api.spotify.com/v1/me/playlists', {
         headers: {'Authorization': 'Bearer ' + accessToken}
@@ -127,6 +149,7 @@ return(
       
         return (
        <div  style={{ top: 0,   marginLeft: "auto", marginRight: "auto"}} >
+         <Header/>
           {this.state.user ?
           <div style={{ justifyContent: "center", alignItems: "center", backgroundColor: "#FE4871", width: "100vw"}}>
               <Card style={{backgroundColor: "#FE4871"}} >
@@ -140,7 +163,7 @@ return(
             window.location = window.location.href.includes('localhost') 
             ? 
             'http://localhost:8888/login'
-            : 'https://cuue-web-backend.herokuapp.com/login'
+            : 'https://cuue.herokuapp.com/login'
         }} variant="light" size="lg" style={{ alignSelf: "center"}}>
             <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify
             </Button> 

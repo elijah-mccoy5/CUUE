@@ -7,27 +7,43 @@ import {Link } from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import GetUserPlaylist from '../../redux/actions/userInfoAction'
 import _ from 'lodash'
-import {useHistory} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 import AddIcon from '@material-ui/icons/Add';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import './index.css'
+import axios from 'axios'
+import {useAuth} from '../../context/AuthContext'
 import { db } from '../../firebase';
 
 const GeneratParty = () => {
   const [channels, setChannels] = useState([]);
   const [partyName, setPartyName] = useState('');
+  const partyId  = useParams();
   const history = useHistory();
+  const {currentUser} = useAuth(); 
 
+  function getAccessToken(){
+    return localStorage.getItem('access_token');
+  }
 const makeParty = (e) => {
- const user = localStorage.getItem('user');
+
   e.preventDefault()
   if(partyName !== ''){
+    axios.post('https://api.spotify.com/v1/users/{user_id}/playlists',{      
+      headers: {'Authorization': 'Bearer ' + getAccessToken() }
+    }).then((res) => res.json())
+    .then((data) => (
+        console.log(data)
+    ))
+    
+
   db.collection("parties").add({
     name: partyName,
-    host: user
+    host: currentUser.email,
+    members: 1
 
 }).then(function(docRef) {
   const partyRoom = docRef.id;
@@ -171,7 +187,6 @@ class SearchPlaylist extends Component {
 }).then(function(docRef) {
 console.log(docRef)
       })
-    
   
     fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {'Authorization': 'Bearer ' + accessToken}
