@@ -138,17 +138,12 @@ const nowSongData = async() => {
             })
     })
     .then(() => {
-      if(nextSongs[0] && allNext !== currentlyPlaying.uri){
-          cuueSong()
+      if(nextSongs[0] && allNext !== nextSongs[0]){
+          CuueSong()
       }
       songChange()
       setCurrentSongID(currentlyPlaying.id)
-      nextSongs.map((item => (
-        console.log("ALL THE UP NEXT SONGS",item.song),
-        setAllNext({
-          song: item.song
-        })
-        )))
+    
     }).then(() => {
       deleteTrack()
     }).then(() => {
@@ -175,19 +170,36 @@ const nowSongData = async() => {
   }
 }
 
-const cuueSong =  async () => {
-   await  axios({
-        method: 'post',
-        url: 'https://api.spotify.com/v1/me/player/queue',
-        params: {
-            uri: allNext.song
-        },
-        headers: {
-          Authorization: 'Bearer ' + getAccessToken()
-        }
-      })
-    console.log("THE SONG HAS BEN SUCCESSFULLY CUUED")
-  
+const CuueSong =  async () => {
+  if(nextSongs[0]){
+  await  axios({
+    method: 'post',
+    url: 'https://api.spotify.com/v1/me/player/queue',
+    params: {
+        uri: nextSongs[nextSongs.length -1].song
+    },
+    headers: {
+      Authorization: 'Bearer ' + getAccessToken()
+    }
+  })
+console.log("THE SONG HAS BEN SUCCESSFULLY CUUED")
+
+}else if (currentlyPlaying.uri ===  allNext.song){
+  deleteTrack()
+return null;
+}else{
+  await  axios({
+    method: 'post',
+    url: 'https://api.spotify.com/v1/me/player/queue',
+    params: {
+        uri:   allNext.song
+    },
+    headers: {
+      Authorization: 'Bearer ' + getAccessToken()
+    }
+  })
+
+}
   
 }
 
@@ -226,7 +238,14 @@ const partyId  = useParams();
       }
         FetchData()
   .then(() => nowSongData())
- 
+
+  nextSongs.map((item => (
+    console.log("ALL THE UP NEXT SONGS",item.song),
+    setAllNext({
+      song: item.song
+    })
+    )))
+    console.log("THOTS WITH US", allNext)
   
   const token = localStorage.getItem('access_token' , getAccessToken())
   
@@ -235,6 +254,9 @@ const partyId  = useParams();
   return;
 FetchData()
 deleteTrack()
+
+
+
 
 
   }, []);
@@ -369,18 +391,8 @@ const handleSongSearch = (e) => {
                 )
               })
              
-            }).then(async() => {
-             
-               await  axios({
-                  method: 'post',
-                  url: 'https://api.spotify.com/v1/me/player/queue',
-                  headers: {
-                    Authorization: 'Bearer ' + getAccessToken()
-                  },
-                    params: {
-                    uri: allNext.song
-                }
-                })
+            }).then(() => {
+             CuueSong()
             }).then(() => {
               deleteTrack()
             })
