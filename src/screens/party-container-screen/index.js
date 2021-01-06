@@ -37,6 +37,7 @@ const AllParties = () => {
             }))
           )
       })
+      console.log(channels)
     },[])
 return(
   <div>
@@ -163,7 +164,7 @@ return(
             window.location = window.location.href.includes('localhost') 
             ? 
             'http://localhost:8888/login'
-            : 'https://cuue.herokuapp.com/login'
+            : 'https://cuue-web-backend.herokuapp.com/login'
         }} variant="light" size="lg" style={{ alignSelf: "center"}}>
             <img style={{ width: "3vw",}} className="mr-4 dash-button" src={spotify} alt="spotify icon"/>Connect with Spotify
             </Button> 

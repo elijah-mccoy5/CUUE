@@ -66,6 +66,9 @@
   .cuue-search {
     width: 400px;
   }
+  .up-next-song {
+    font-size: 2vh;
+  }
 }
 
 @media only screen and (min-width: 600px) {

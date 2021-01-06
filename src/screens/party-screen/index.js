@@ -139,9 +139,7 @@ const nowSongData = async() => {
             })
     })
     .then(() => {
-      songChange()
       setCurrentSongID(currentlyPlaying.id)
-    
     })
   }catch{
     
@@ -149,21 +147,16 @@ const nowSongData = async() => {
   }
 
  }
- function songChange (){
-  if(needData === true){
-    FetchData()
-    .then(() => {
-      setNeedData(false)
-    })
-  }
-  if(currentlyPlaying.duration - currentlyPlaying.progress === 0){
-    FetchData()
-  }
-  else{
-   console.log("error")
-  }
-}
 
+
+const songTimer = () => {
+const songProgress = currentlyPlaying.duration - currentlyPlaying.progress
+setInterval(() => {
+  FetchData()
+}, [songProgress])
+
+console.log("SONG PROGRESS", songProgress)
+}
 
 
     const CuueSong =  async () => {
@@ -221,7 +214,6 @@ const partyId  = useParams();
   .then(() => nowSongData())
 
 
-
   
   const token = localStorage.getItem('access_token' , getAccessToken())
   
@@ -251,8 +243,6 @@ deleteTrack()
       })
       .then(() => {
         FetchData()
-      }).then(() => {
-        songChange()
       })
  
  
@@ -267,8 +257,6 @@ const handlePlay = () => {
     }
   }).then(() => {
     FetchData()
-  }).then(() => {
-    songChange()
   })
 }catch{
   GetThisToken()
@@ -403,8 +391,14 @@ const handleSongSearch = (e) => {
             
 
           const handleUpLike = () => {
-            setLikes(likes + 1)
-           
+          //   db.collection("parties")
+          //   .doc(partyId.id)
+          //   .collection('up_next')
+          //   .doc(nextSongs[0].id)
+          //   .set({
+          //     likes: likes,
+          // })
+          setLikes(likes + 1)
           }
           const handleDownLike = () => {
             setLikes(likes - 1)
@@ -454,17 +448,12 @@ console.log("Object values",Object.values(nextSongs))
               <Button className="cuue-button" variant="primary" onClick={handleToggle} >CUUE <AddIcon style={{fontSize: "3vh", marginBottom: "1vh"}}/></Button>
               
               <div className="player-controls" >
-              <SkipPreviousIcon id="control-buttons" onClick={()=> handleGoBackSong()
-              &&  setNeedData(true)}/>
+              <SkipPreviousIcon id="control-buttons" onClick={()=> handleGoBackSong()}/>
               {currentlyPlaying.is_playing ?
-               <PauseCircleFilledIcon id="control-buttons"  onClick={()=> handlePause()
-                && setNeedData(true)}/> :
-                <PlayCircleFilledIcon  id="control-buttons" onClick={()=> handlePlay()
-                  &&
-                  setNeedData(true)}/>}
+               <PauseCircleFilledIcon id="control-buttons"  onClick={()=> handlePause()}/> :
+                <PlayCircleFilledIcon  id="control-buttons" onClick={()=> handlePlay()}/>}
               
-              <SkipNextIcon id="control-buttons"  onClick={()=> handleSkipSong()
-                && setNeedData(true)}/>
+              <SkipNextIcon id="control-buttons"  onClick={()=> handleSkipSong()}/>
               </div>
               </div>
             
@@ -529,7 +518,7 @@ console.log("Object values",Object.values(nextSongs))
           <ul className="up-next-container ">
               {nextSongs.map(song => (
    <li key={song.id} className="up-next-card">
-   <h3>{song.song}</h3>
+   <h3 className="up-next-song">{song.song}</h3>
      <ArrowUpwardIcon onClick={handleUpLike} style={{fontSize: "5vh"}}/>
      <h4>{song.likes}</h4>
      <ArrowDownwardIcon  onClick={handleDownLike}  style={{fontSize: "5vh"}}/>
