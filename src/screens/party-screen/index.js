@@ -211,13 +211,18 @@ const partyId  = useParams();
       )
       }
         FetchData()
-  .then(() => nowSongData())
+       
+
+        nowSongData()
 
 
   
   const token = localStorage.getItem('access_token' , getAccessToken())
   
-  
+  if (token && name?.host !== currentUser.email ){
+    nowSongData()
+    }
+
   if(!token) 
   return;
 FetchData()
@@ -227,7 +232,6 @@ FetchData()
   }
 })
 deleteTrack()
-
 
 
 
@@ -415,15 +419,15 @@ console.log("Object values",Object.values(nextSongs))
           <Header/>
     <Jumbotron style={{height: "98vh", width: "100vw", marginBottom: "auto", backgroundColor: "#FE4871", boxSizing: "border-box", backgroundSize: "cover"}}>
       <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" ,marginBottom: "6vh", zIndex: 2}}>
-      <Avatar/>
-      <h3>{name?.name}</h3>
-      <h3>Host: {name?.host}</h3>
+      <Avatar className="profile-button"/>
+      <h3 className="party-name">{name?.name}</h3>
+      <h3 className="party-host">Host: {name?.host}</h3>
         <Link to="/">
-        <Button variant="warning">Leave party</Button>
+        <Button  className="leave-party" variant="warning">Leave party</Button>
         </Link>
         </div>
 
-          {currentlyPlaying ? 
+          {currentlyPlaying ?
           <>  
           {(name?.host === currentUser.email ) ?
             <div className="song-contents">
@@ -460,54 +464,59 @@ console.log("Object values",Object.values(nextSongs))
           }
          </div>
          </div>
-         : []
-      //      <div className="song-contents">
-      //      <img  className="song-image"  src={nowSong.image} alt="currently playing song name"/>
-      //   <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
-      // <h1  className="song-name" onClick={handleToggle}>{nowSong.name}</h1>
-      //   <p className="song-artist">{nowSong.artist}</p>
-      //   {search ? <div className="AutoCompleteText">
-      //    <AutoComplete  defaultOpen={false} type="text" id="cuue-search" onChange={handleSongSearch} >
+         :
+         <>
+         {nowSong ?
+           <div className="song-contents">
+           <img  className="song-image"  src={nowSong.image} alt="currently playing song name"/>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
+      <h1  className="song-name" onClick={handleToggle}>{nowSong.name}</h1>
+        <p className="song-artist">{nowSong.artist}</p>
+        {search ? <div className="AutoCompleteText">
+         <AutoComplete  defaultOpen={false} type="text" id="cuue-search" onChange={handleSongSearch} >
          
-      //     {options.map((option) => (
-      //       <>
-      //  <Option key={option.uri} value={option.name} className="search-options" onSelect={() => {
-      //  }}>
-      //    <img  src={option.image} alt="album cover" className="search-image"/>
-      //  <p className="search-name-option"> {option.name}</p> 
-      //  <Button variant="warning" className="q-btn" onClick={() => {
-      //    // setNextSongs([...nextSongs, option.uri])
-      //    // console.log("next songs",nextSongs)
-      //    console.log("hello")
-      //     }}>CUUE</Button>
-      //  </Option>
-      //     </> 
+          {options.map((option) => (
+            <>
+       <Option key={option.uri} value={option.name} className="search-options" onSelect={() => {
+       }}>
+         <img  src={option.image} alt="album cover" className="search-image"/>
+       <p className="search-name-option"> {option.name}</p> 
+       <Button variant="warning" className="q-btn" onClick={() => {
+         // setNextSongs([...nextSongs, option.uri])
+         // console.log("next songs",nextSongs)
+         console.log("hello")
+          }}>CUUE</Button>
+       </Option>
+          </> 
          
-      //     ))}
+          ))}
          
                  
-      //           </AutoComplete>
-      //  </div>
-     
-      //    : 
-      //    <div>
-      //    <Button className="cuue-button" variant="primary" onClick={handleToggle} >CUUE <AddIcon style={{fontSize: "3vh", marginBottom: "1vh"}}/></Button>
+                </AutoComplete>
+       </div>
+         : 
+         <div>
+         <Button className="cuue-button" variant="primary" onClick={handleToggle} >CUUE <AddIcon style={{fontSize: "3vh", marginBottom: "1vh"}}/></Button>
          
          
-      //    <div className="player-controls" >
-      //    <SkipPreviousIcon id="control-buttons" onClick={()=> handleGoBackSong()
-      //     &&  setNeedData(true)}/>
-      //    <PauseCircleFilledIcon id="control-buttons"  onClick={()=> handlePause()
-      //      && setNeedData(true)}/>
-      //    <SkipNextIcon id="control-buttons"  onClick={()=> handleSkipSong()
-      //       && setNeedData(true)}/>
-      //    </div>
-      //    </div>
-       
-      //    }
-      //   </div>
-      //   </div>
+         <div className="player-controls" >
+         <SkipPreviousIcon id="control-buttons" onClick={()=> handleGoBackSong()
+          &&  setNeedData(true)}/>
+         <PauseCircleFilledIcon id="control-buttons"  onClick={()=> handlePause()
+           && setNeedData(true)}/>
+         <SkipNextIcon id="control-buttons"  onClick={()=> handleSkipSong()
+            && setNeedData(true)}/>
+         </div>
+         </div>
+         }
+         
+        </div>
+        </div>
+: []}
+</>
             }
+            
+ 
        
           
       
@@ -538,6 +547,7 @@ console.log("Object values",Object.values(nextSongs))
   </Jumbotron>
            
 </div>
+
   );
 
 }
